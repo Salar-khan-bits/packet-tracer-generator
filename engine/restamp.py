@@ -7,7 +7,7 @@ so on an older PT every generated file is rejected. This rewrites the version in
 place (container is decoded and re-encoded; nothing else changes).
 
 Usage:
-    python -m engine.restamp 8.2.2.0400 generated/lab_05/*.pkt generated/assignment_cisco/*.pkt
+    python -m engine.restamp 8.2.2.0400 generated/mylab.pkt
     python -m engine.restamp 8.2.2.0400            # defaults to all generated .pkt
 """
 

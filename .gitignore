@@ -5,11 +5,11 @@ __pycache__/
 .venv/
 .env
 
-# Generated Packet Tracer outputs (regenerate with the build scripts / genlab.py)
+# Generated Packet Tracer outputs (regenerate with genlab.py)
 generated/**/*.pkt
 generated/service_reference_xml/
 
-# Large machine-generated report (regenerate with engine.discovery)
+# Large machine-generated report (not needed to use the tool)
 generated/capability_report.json
 
 # OS / editor

@@ -1,0 +1,22 @@
+{
+  "name": "example_lan",
+  "mask": "255.255.255.0",
+  "devices": [
+    {"name": "Switch0", "model": "2960-24TT", "x": 430, "y": 250},
+    {"name": "Server0", "model": "Server-PT", "x": 430, "y": 110, "ip": "192.168.1.10", "connect_to": "Switch0"},
+    {"name": "PC1", "model": "PC-PT", "x": 150, "y": 420, "dhcp": true, "connect_to": "Switch0", "email": {"user": "pc1", "password": "pc1", "mail_id": "pc1@example.test"}},
+    {"name": "PC2", "model": "PC-PT", "x": 300, "y": 420, "dhcp": true, "connect_to": "Switch0", "email": {"user": "pc2", "password": "pc2", "mail_id": "pc2@example.test"}},
+    {"name": "PC3", "model": "PC-PT", "x": 450, "y": 420, "dhcp": true, "connect_to": "Switch0", "email": {"user": "pc3", "password": "pc3", "mail_id": "pc3@example.test"}},
+    {"name": "PC4", "model": "PC-PT", "x": 600, "y": 420, "dhcp": true, "connect_to": "Switch0", "email": {"user": "pc4", "password": "pc4", "mail_id": "pc4@example.test"}}
+  ],
+  "services": {
+    "server": "Server0",
+    "dhcp": {"pool_name": "lan", "network": "192.168.1.0", "start": "192.168.1.100", "end": "192.168.1.200", "dns": "192.168.1.10", "gateway": "0.0.0.0", "max_users": 100},
+    "dns": [
+      ["www.example.test", "192.168.1.10"],
+      ["mail.example.test", "192.168.1.10"]
+    ],
+    "email": {"domain": "example.test", "accounts": [["pc1", "pc1"], ["pc2", "pc2"], ["pc3", "pc3"], ["pc4", "pc4"]]},
+    "http": "<html><head><title>Example LAN</title></head><body><center><h1>Example LAN</h1></center><p>This page is served by the Packet Tracer server over HTTP.</p></body></html>"
+  }
+}

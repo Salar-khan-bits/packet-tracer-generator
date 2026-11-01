@@ -58,7 +58,7 @@ RULES:
 - Keep x spread ~125 apart on one row (y=420) for clients; switch y=250; server y=110.
 
 THE TASK:
-<<< PASTE THE FULL TASK / ASSIGNMENT TEXT HERE >>>
+<<< PASTE THE FULL TASK TEXT HERE >>>
 
 Output ONLY the JSON. Also tell me the exact command to run it, in the form:
   python genlab.py specifications/<name>.json --pt-version <<< YOUR PACKET TRACER BUILD >>>
@@ -75,7 +75,8 @@ Output ONLY the JSON. Also tell me the exact command to run it, in the form:
    open pages in the browser, screenshots.
 
 ## Want a standalone `.py` instead of a spec?
-Ask the AI: *"Instead of JSON, write a Python script like `build_assignment1.py`
-that imports `engine.emit.services` and `engine.emit.clients` to build the same
-lab, and give me the run command."* The JSON+`genlab.py` route is simpler and
-less error-prone, so prefer it unless the task needs custom logic.
+Ask the AI: *"Instead of JSON, write a Python script that uses
+`pkt_core.builder.lab.Lab` plus `engine.emit.services` and `engine.emit.clients`
+to build the same lab, and give me the run command."* The JSON + `genlab.py`
+route is simpler and less error-prone, so prefer it unless a task needs custom
+logic.

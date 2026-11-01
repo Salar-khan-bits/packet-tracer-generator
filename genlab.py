@@ -9,10 +9,10 @@ real PT formats, so output opens and is ready to use.
     python genlab.py mylab.json -o out.pkt
     python genlab.py mylab.json --pt-version 8.2.2.0400   # stamp for an older PT
 
-Spec shape (see specifications/example_showcase.json):
+Spec shape (see specifications/example_lan.json):
 
 {
-  "name": "showcase",
+  "name": "example",
   "pt_version": "9.0.1.0858",          # optional; or --pt-version / $PT_VERSION
   "mask": "255.255.255.0",
   "devices": [
@@ -20,7 +20,7 @@ Spec shape (see specifications/example_showcase.json):
     {"name":"Server0","model":"Server-PT","x":430,"y":110,"ip":"192.168.10.10",
      "connect_to":"Switch0"},
     {"name":"PC1","model":"PC-PT","x":150,"y":420,"dhcp":true,"connect_to":"Switch0",
-     "email":{"user":"a","password":"a","mail_id":"a@showcase.test"},
+     "email":{"user":"a","password":"a","mail_id":"a@example.test"},
      "ios_config":["..."]}
   ],
   "links": [                            # for links connect_to can't express
@@ -30,8 +30,8 @@ Spec shape (see specifications/example_showcase.json):
     "server":"Server0",
     "dhcp":{"pool_name":"p","network":"192.168.10.0","start":"192.168.10.100",
             "end":"192.168.10.200","dns":"192.168.10.10","gateway":"0.0.0.0"},
-    "dns":[["www.showcase.test","192.168.10.10"]],
-    "email":{"domain":"showcase.test","accounts":[["a","a"],["b","b"]]},
+    "dns":[["www.example.test","192.168.10.10"]],
+    "email":{"domain":"example.test","accounts":[["a","a"],["b","b"]]},
     "http":"<html>...</html>"
   }
 }
