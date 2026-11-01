@@ -54,6 +54,47 @@ pip install -r requirements.txt
 ✅ Ends with `Successfully installed packet-tracer-pkt-format-0.4.1 ...`, and your
 prompt now starts with `(pt)`.
 
+#### No conda? Use Python's built-in `venv` instead
+
+If you already have **Python 3.10+** and don't want Miniconda, skip step 1's
+Miniconda and do this in a normal terminal (check `python --version` first):
+
+**Windows:**
+
+```bat
+cd /d D:\packet-tracer-generator
+python -m venv .venv
+```
+
+Activate — pick the line for your terminal:
+
+```bat
+.venv\Scripts\activate.bat            REM Command Prompt (CMD)
+.venv\Scripts\Activate.ps1            REM PowerShell
+source .venv/Scripts/activate         REM Git Bash
+```
+
+Then install:
+
+```bat
+pip install -r requirements.txt
+```
+
+**macOS / Linux:**
+
+```bash
+cd /path/to/packet-tracer-generator
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Notes:
+- If `python` isn't found but `py` is, use `py -m venv .venv` (or `py -3.10 -m venv .venv`).
+- PowerShell blocks activation? Run once: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, then activate again.
+- Everyday use: re-activate the venv in each new terminal before running commands.
+- The `.venv` folder is git-ignored, so it's never committed.
+
 ### 4. Check it works
 
 ```bat
