@@ -120,17 +120,18 @@ email), and 4 PCs.
 ## Part 3 — Make a lab from a new task (the main use)
 
 1. Open **`AI_PROMPT.md`** and copy the prompt block.
-2. Paste it into any AI. At the bottom, replace the two placeholders:
+2. Paste it into any AI. At the bottom, replace the placeholders:
+   - your **name + roll number**
    - your **task text**
    - your **Packet Tracer build** (from Help → About)
 3. Save the JSON it gives back as `specifications/mylab.json`.
-4. Generate:
+4. Generate (always use `--seed` with your name/roll so your file is unique):
 
 ```bat
-python genlab.py specifications/mylab.json --pt-version 9.0.1.0858
+python genlab.py specifications/mylab.json --seed "Your Name 22F-1234" --pt-version 9.0.1.0858
 ```
 
-(use your real PT build). 5. Open `generated\mylab.pkt` in Packet Tracer.
+(use your real name/roll and PT build). 5. Open `generated\mylab.pkt` in Packet Tracer.
 
 **Why this is safe for any task:** the AI only writes the *spec* (what devices
 and services you want). The tool holds the correct Packet Tracer formats, so the
