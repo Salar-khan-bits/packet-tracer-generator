@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.env
+
+# Generated Packet Tracer outputs (regenerate with the build scripts / genlab.py)
+generated/**/*.pkt
+generated/service_reference_xml/
+
+# Large machine-generated report (regenerate with engine.discovery)
+generated/capability_report.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

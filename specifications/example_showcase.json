@@ -1,0 +1,24 @@
+{
+  "name": "example_showcase",
+  "mask": "255.255.255.0",
+  "devices": [
+    {"name": "Switch0",   "model": "2960-24TT", "x": 430, "y": 250},
+    {"name": "Server0",   "model": "Server-PT", "x": 430, "y": 110, "ip": "192.168.10.10", "connect_to": "Switch0"},
+    {"name": "AI-PC1",    "model": "PC-PT",     "x": 110, "y": 420, "dhcp": true, "connect_to": "Switch0", "email": {"user": "ai1", "password": "ai1", "mail_id": "ai1@showcase.test"}},
+    {"name": "AI-PC2",    "model": "PC-PT",     "x": 235, "y": 420, "dhcp": true, "connect_to": "Switch0", "email": {"user": "ai2", "password": "ai2", "mail_id": "ai2@showcase.test"}},
+    {"name": "AI-Laptop", "model": "Laptop-PT", "x": 360, "y": 420, "dhcp": true, "connect_to": "Switch0"},
+    {"name": "DS-PC1",    "model": "PC-PT",     "x": 485, "y": 420, "dhcp": true, "connect_to": "Switch0", "email": {"user": "ds1", "password": "ds1", "mail_id": "ds1@showcase.test"}},
+    {"name": "DS-PC2",    "model": "PC-PT",     "x": 610, "y": 420, "dhcp": true, "connect_to": "Switch0", "email": {"user": "ds2", "password": "ds2", "mail_id": "ds2@showcase.test"}},
+    {"name": "DS-PC3",    "model": "PC-PT",     "x": 735, "y": 420, "dhcp": true, "connect_to": "Switch0", "email": {"user": "ds3", "password": "ds3", "mail_id": "ds3@showcase.test"}}
+  ],
+  "services": {
+    "server": "Server0",
+    "dhcp": {"pool_name": "showcasePool", "network": "192.168.10.0", "start": "192.168.10.100", "end": "192.168.10.200", "dns": "192.168.10.10", "gateway": "0.0.0.0", "max_users": 100},
+    "dns": [
+      ["www.showcase.test", "192.168.10.10"],
+      ["mail.showcase.test", "192.168.10.10"]
+    ],
+    "email": {"domain": "showcase.test", "accounts": [["ai1", "ai1"], ["ai2", "ai2"], ["ai3", "ai3"], ["ds1", "ds1"], ["ds2", "ds2"], ["ds3", "ds3"]]},
+    "http": "<html><head><title>Showcase</title></head><body><center><h1>AI & Data Science Showcase</h1></center><p>Welcome to the student showcase.</p></body></html>"
+  }
+}

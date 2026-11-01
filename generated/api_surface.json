@@ -1,0 +1,3020 @@
+{
+  "version": "0.4.1",
+  "modules": {
+    "pkt_core": {
+      "classes": {
+        "Container": {
+          "where": "pkt_core\\codec\\container.py:53",
+          "doc": "A decoded container: the bytes we started from, and what they held.",
+          "methods": {
+            "is_activity": {
+              "kind": "property"
+            },
+            "root_tag": {
+              "kind": "property"
+            }
+          }
+        },
+        "FormatSpec": {
+          "where": "pkt_core\\crypto\\keys.py:38",
+          "doc": "Everything needed to seal or open one container flavour.",
+          "methods": {
+            "is_legacy": {
+              "kind": "property"
+            },
+            "iv": {
+              "kind": "property"
+            },
+            "key": {
+              "kind": "property"
+            }
+          }
+        },
+        "PacketTracerError": {
+          "where": "pkt_core\\errors.py:20",
+          "doc": "Base class for every error raised by :mod:`pkt_core`.",
+          "methods": {}
+        },
+        "FormatError": {
+          "where": "pkt_core\\errors.py:24",
+          "doc": "The bytes are not a container of the format that was assumed.",
+          "methods": {}
+        },
+        "IntegrityError": {
+          "where": "pkt_core\\errors.py:28",
+          "doc": "The authenticated-encryption tag did not match: data is corrupt or the",
+          "methods": {}
+        },
+        "TruncatedFileError": {
+          "where": "pkt_core\\errors.py:38",
+          "doc": "The input ends before a complete container could be read.",
+          "methods": {}
+        },
+        "CompressionError": {
+          "where": "pkt_core\\errors.py:42",
+          "doc": "The qCompress/zlib layer could not be inflated, or its length header lied.",
+          "methods": {}
+        },
+        "UnsupportedCipherError": {
+          "where": "pkt_core\\errors.py:34",
+          "doc": "The requested block cipher is unavailable in the current backend.",
+          "methods": {}
+        },
+        "Lab": {
+          "where": "pkt_core\\builder\\lab.py:615",
+          "doc": "",
+          "methods": {
+            "add_device": {
+              "kind": "method",
+              "signature": "(self, model: 'str', name: 'str', x: 'int' = 100, y: 'int' = 100, power: 'bool' = True, ios_config: 'Sequence[str] | None' = None, pc_ip: 'Sequence[str] | None' = None, install: 'str | None' = None, bay: 'int' = 0, on_name_conflict: 'str' = 'raise') -> 'str'"
+            },
+            "device_names": {
+              "kind": "method",
+              "signature": "(self) -> 'list[str]'"
+            },
+            "drop_initial": {
+              "kind": "method",
+              "signature": "(self)"
+            },
+            "drop_seed_devices": {
+              "kind": "method",
+              "signature": "(self) -> 'list[str]'"
+            },
+            "initial_id": {
+              "kind": "method",
+              "signature": "(self, index=0)"
+            },
+            "install_module": {
+              "kind": "method",
+              "signature": "(self, dev_id, module_model, bay=None, *, slot=None)"
+            },
+            "link": {
+              "kind": "method",
+              "signature": "(self, a_id, a_port, b_id, b_port, kind='copper', dce=None, dce_port=None, clock=128000)"
+            },
+            "prune_seed_devices": {
+              "kind": "method",
+              "signature": "(self) -> 'list[str]'"
+            },
+            "save": {
+              "kind": "method",
+              "signature": "(self, path)"
+            },
+            "set_config_register": {
+              "kind": "method",
+              "signature": "(self, dev_id, value)"
+            },
+            "set_os": {
+              "kind": "method",
+              "signature": "(self, dev_id, image=None, file_name=None)"
+            },
+            "set_wireless": {
+              "kind": "method",
+              "signature": "(self, dev_id, ssid=None, auth_type=None, encrypt_type=None, password=None, userid=None, channel=None, radio_band=None)"
+            }
+          }
+        },
+        "Layout": {
+          "where": "pkt_core\\builder\\lab.py:420",
+          "doc": "Label-inclusive greedy row-major packer with an occupancy test.",
+          "methods": {
+            "anchor": {
+              "kind": "method",
+              "signature": "(self, group: 'str', x: 'float', y: 'float') -> 'None'"
+            },
+            "forget": {
+              "kind": "method",
+              "signature": "(self, name: 'str') -> 'None'"
+            },
+            "place": {
+              "kind": "method",
+              "signature": "(self, name: 'str', model: 'str', group: 'str' = '', kind: 'str | None' = None) -> 'Placement'"
+            },
+            "placements": {
+              "kind": "property"
+            },
+            "reserve": {
+              "kind": "method",
+              "signature": "(self, name: 'str', model: 'str', x: 'float', y: 'float', kind: 'str | None' = None) -> 'Placement'"
+            }
+          }
+        }
+      },
+      "functions": {
+        "decode": {
+          "signature": "(path: 'str | Path', fmt: 'FormatName | None' = None, *, verify_tag: 'bool' = True) -> 'Container'",
+          "where": "pkt_core\\codec\\container.py:237",
+          "doc": "Read ``path`` from disk and :func:`decode_bytes` it."
+        },
+        "decode_bytes": {
+          "signature": "(raw: 'bytes', fmt: 'FormatName | None' = None, *, verify_tag: 'bool' = True) -> 'Container'",
+          "where": "pkt_core\\codec\\container.py:189",
+          "doc": "Open a container and return its XML payload."
+        },
+        "encode": {
+          "signature": "(path: 'str | Path', xml: 'bytes', fmt: 'FormatName' = 'pkt', *, level: 'int' = -1) -> 'None'",
+          "where": "pkt_core\\codec\\container.py:283",
+          "doc": "Build a container from XML bytes and write it to ``path``."
+        },
+        "encode_bytes": {
+          "signature": "(xml: 'bytes', fmt: 'FormatName' = 'pkt', *, level: 'int' = -1) -> 'bytes'",
+          "where": "pkt_core\\codec\\container.py:251",
+          "doc": "Build a container from XML bytes."
+        },
+        "detect_format": {
+          "signature": "(raw: 'bytes', candidates: 'Sequence[FormatName] | None' = None) -> 'FormatName'",
+          "where": "pkt_core\\codec\\container.py:130",
+          "doc": "Identify the container family and flavour."
+        },
+        "root_tag": {
+          "signature": "(xml: 'bytes') -> 'str'",
+          "where": "pkt_core\\codec\\container.py:80",
+          "doc": "Extract the root element name from an XML byte string without parsing it."
+        },
+        "get_format": {
+          "signature": "(name: 'FormatName') -> 'FormatSpec'",
+          "where": "pkt_core\\crypto\\keys.py:141",
+          "doc": "Look up a container flavour by name."
+        },
+        "eax_seal": {
+          "signature": "(cipher_name: 'str', key: 'bytes', iv: 'bytes', plaintext: 'bytes') -> 'bytes'",
+          "where": "pkt_core\\crypto\\primitives.py:178",
+          "doc": "Encrypt-and-authenticate: returns ``ciphertext || tag``."
+        },
+        "eax_open": {
+          "signature": "(cipher_name: 'str', key: 'bytes', iv: 'bytes', data: 'bytes') -> 'EaxResult'",
+          "where": "pkt_core\\crypto\\primitives.py:197",
+          "doc": "Verify and decrypt ``ciphertext || tag``."
+        },
+        "eax_verify": {
+          "signature": "(cipher_name: 'str', key: 'bytes', iv: 'bytes', data: 'bytes') -> 'bool'",
+          "where": "pkt_core\\crypto\\primitives.py:232",
+          "doc": "Return whether ``data`` authenticates under this key/IV. Cheap rejection."
+        },
+        "qcompress": {
+          "signature": "(data: 'bytes', level: 'int' = -1) -> 'bytes'",
+          "where": "pkt_core\\codec\\qcompress.py:63",
+          "doc": "Build a Qt ``qCompress`` payload."
+        },
+        "quncompress": {
+          "signature": "(payload: 'bytes') -> 'bytes'",
+          "where": "pkt_core\\codec\\qcompress.py:28",
+          "doc": "Inflate a Qt ``qCompress`` payload back to its original bytes."
+        },
+        "load_templates": {
+          "signature": "(path: 'str | os.PathLike[str] | None' = None) -> 'tuple[dict[str, bytes], dict[str, str]]'",
+          "where": "pkt_core\\builder\\lab.py:108",
+          "doc": "Load a device/module template library."
+        }
+      },
+      "exports": [
+        "Container",
+        "decode",
+        "decode_bytes",
+        "encode",
+        "encode_bytes",
+        "detect_format",
+        "root_tag",
+        "DEFAULT_FORMAT",
+        "FORMATS",
+        "FormatSpec",
+        "get_format",
+        "BLOCK_SIZE",
+        "TAG_SIZE",
+        "eax_seal",
+        "eax_open",
+        "eax_verify",
+        "qcompress",
+        "quncompress",
+        "PacketTracerError",
+        "FormatError",
+        "IntegrityError",
+        "TruncatedFileError",
+        "CompressionError",
+        "UnsupportedCipherError",
+        "__version__",
+        "Lab",
+        "Layout",
+        "load_templates"
+      ]
+    },
+    "pkt_core.builder.lab": {
+      "classes": {
+        "Device": {
+          "where": "pkt_core\\builder\\lab.py:358",
+          "doc": "One device as read back from a decoded lab.",
+          "methods": {}
+        },
+        "Lab": {
+          "where": "pkt_core\\builder\\lab.py:615",
+          "doc": "",
+          "methods": {
+            "add_device": {
+              "kind": "method",
+              "signature": "(self, model: 'str', name: 'str', x: 'int' = 100, y: 'int' = 100, power: 'bool' = True, ios_config: 'Sequence[str] | None' = None, pc_ip: 'Sequence[str] | None' = None, install: 'str | None' = None, bay: 'int' = 0, on_name_conflict: 'str' = 'raise') -> 'str'"
+            },
+            "device_names": {
+              "kind": "method",
+              "signature": "(self) -> 'list[str]'"
+            },
+            "drop_initial": {
+              "kind": "method",
+              "signature": "(self)"
+            },
+            "drop_seed_devices": {
+              "kind": "method",
+              "signature": "(self) -> 'list[str]'"
+            },
+            "initial_id": {
+              "kind": "method",
+              "signature": "(self, index=0)"
+            },
+            "install_module": {
+              "kind": "method",
+              "signature": "(self, dev_id, module_model, bay=None, *, slot=None)"
+            },
+            "link": {
+              "kind": "method",
+              "signature": "(self, a_id, a_port, b_id, b_port, kind='copper', dce=None, dce_port=None, clock=128000)"
+            },
+            "prune_seed_devices": {
+              "kind": "method",
+              "signature": "(self) -> 'list[str]'"
+            },
+            "save": {
+              "kind": "method",
+              "signature": "(self, path)"
+            },
+            "set_config_register": {
+              "kind": "method",
+              "signature": "(self, dev_id, value)"
+            },
+            "set_os": {
+              "kind": "method",
+              "signature": "(self, dev_id, image=None, file_name=None)"
+            },
+            "set_wireless": {
+              "kind": "method",
+              "signature": "(self, dev_id, ssid=None, auth_type=None, encrypt_type=None, password=None, userid=None, channel=None, radio_band=None)"
+            }
+          }
+        },
+        "Layout": {
+          "where": "pkt_core\\builder\\lab.py:420",
+          "doc": "Label-inclusive greedy row-major packer with an occupancy test.",
+          "methods": {
+            "anchor": {
+              "kind": "method",
+              "signature": "(self, group: 'str', x: 'float', y: 'float') -> 'None'"
+            },
+            "forget": {
+              "kind": "method",
+              "signature": "(self, name: 'str') -> 'None'"
+            },
+            "place": {
+              "kind": "method",
+              "signature": "(self, name: 'str', model: 'str', group: 'str' = '', kind: 'str | None' = None) -> 'Placement'"
+            },
+            "placements": {
+              "kind": "property"
+            },
+            "reserve": {
+              "kind": "method",
+              "signature": "(self, name: 'str', model: 'str', x: 'float', y: 'float', kind: 'str | None' = None) -> 'Placement'"
+            }
+          }
+        },
+        "Placement": {
+          "where": "pkt_core\\builder\\lab.py:367",
+          "doc": "One device as placed (or reserved) by :class:`Layout`.",
+          "methods": {}
+        }
+      },
+      "functions": {
+        "column_pitch": {
+          "signature": "(name: 'str') -> 'int'",
+          "where": "pkt_core\\builder\\lab.py:278",
+          "doc": "Minimum centre-to-centre advance for a device called ``name``."
+        },
+        "device_box": {
+          "signature": "(kind: 'str', name: 'str', model_caption: 'str') -> 'tuple[int, int]'",
+          "where": "pkt_core\\builder\\lab.py:259",
+          "doc": "Return the label-inclusive cell (width, height) of one device."
+        },
+        "harvest_models": {
+          "signature": "(saves_dir, wanted=None)",
+          "where": "pkt_core\\builder\\lab.py:140",
+          "doc": "Return {model: <DEVICE> bytes} taking the first instance of each model."
+        },
+        "harvest_modules": {
+          "signature": "(saves_dir, wanted)",
+          "where": "pkt_core\\builder\\lab.py:174",
+          "doc": "Return {module_model: <SLOT> xml bytes} for modules found in devices."
+        },
+        "kind_for_model": {
+          "signature": "(model: 'str') -> 'str'",
+          "where": "pkt_core\\builder\\lab.py:250",
+          "doc": "Map a PT device *model* string onto an icon-size class."
+        },
+        "label_box": {
+          "signature": "(kind: 'str', name: 'str', model_caption: 'str') -> 'tuple[int, int]'",
+          "where": "pkt_core\\builder\\lab.py:272",
+          "doc": "Return the icon+label box *without* the packing gutter (w, h)."
+        },
+        "load_templates": {
+          "signature": "(path: 'str | os.PathLike[str] | None' = None) -> 'tuple[dict[str, bytes], dict[str, str]]'",
+          "where": "pkt_core\\builder\\lab.py:108",
+          "doc": "Load a device/module template library."
+        },
+        "load_tier_map": {
+          "signature": "(path: \"'str | os.PathLike[str] | None'\") -> 'int'",
+          "where": "pkt_core\\builder\\lab.py:312",
+          "doc": "Load caller tier rules, tried before the built-in ones."
+        },
+        "normalise_device_power": {
+          "signature": "(blk)",
+          "where": "pkt_core\\builder\\lab.py:82",
+          "doc": "Force a harvested <DEVICE> block's <ENGINE><POWER> to \"true\"."
+        },
+        "parse_devices": {
+          "signature": "(xml: 'str | bytes') -> 'list[Device]'",
+          "where": "pkt_core\\builder\\lab.py:380",
+          "doc": "Return every NETWORK device of a decoded lab, in document order."
+        },
+        "tier_for_name": {
+          "signature": "(name: 'str') -> 'str'",
+          "where": "pkt_core\\builder\\lab.py:343",
+          "doc": "Map a device name onto its semantic tier band (see :class:`Layout`)."
+        }
+      },
+      "exports": [
+        "Any",
+        "CANVAS_MAX",
+        "CANVAS_MIN",
+        "CHAR_W",
+        "Device",
+        "ET",
+        "FLOOR",
+        "GUTTER",
+        "ICON_W",
+        "Iterable",
+        "LABEL_LINE",
+        "Lab",
+        "Layout",
+        "NamedTuple",
+        "PAGE_WIDTH",
+        "Placement",
+        "ROW_PITCH",
+        "SKIP_STEP",
+        "Sequence",
+        "annotations",
+        "column_pitch",
+        "copy",
+        "decode",
+        "decode_bytes",
+        "device_box",
+        "encode",
+        "harvest_models",
+        "harvest_modules",
+        "hashlib",
+        "json",
+        "kind_for_model",
+        "label_box",
+        "load_device_templates",
+        "load_network_seed",
+        "load_templates",
+        "load_tier_map",
+        "math",
+        "normalise_device_power",
+        "os",
+        "parse_devices",
+        "re",
+        "sys",
+        "tier_for_name",
+        "uuid"
+      ]
+    },
+    "pkt_core.codec.container": {
+      "classes": {
+        "Container": {
+          "where": "pkt_core\\codec\\container.py:53",
+          "doc": "A decoded container: the bytes we started from, and what they held.",
+          "methods": {
+            "is_activity": {
+              "kind": "property"
+            },
+            "root_tag": {
+              "kind": "property"
+            }
+          }
+        }
+      },
+      "functions": {
+        "decode_bytes": {
+          "signature": "(raw: 'bytes', fmt: 'FormatName | None' = None, *, verify_tag: 'bool' = True) -> 'Container'",
+          "where": "pkt_core\\codec\\container.py:189",
+          "doc": "Open a container and return its XML payload."
+        },
+        "decode": {
+          "signature": "(path: 'str | Path', fmt: 'FormatName | None' = None, *, verify_tag: 'bool' = True) -> 'Container'",
+          "where": "pkt_core\\codec\\container.py:237",
+          "doc": "Read ``path`` from disk and :func:`decode_bytes` it."
+        },
+        "encode_bytes": {
+          "signature": "(xml: 'bytes', fmt: 'FormatName' = 'pkt', *, level: 'int' = -1) -> 'bytes'",
+          "where": "pkt_core\\codec\\container.py:251",
+          "doc": "Build a container from XML bytes."
+        },
+        "encode": {
+          "signature": "(path: 'str | Path', xml: 'bytes', fmt: 'FormatName' = 'pkt', *, level: 'int' = -1) -> 'None'",
+          "where": "pkt_core\\codec\\container.py:283",
+          "doc": "Build a container from XML bytes and write it to ``path``."
+        },
+        "detect_format": {
+          "signature": "(raw: 'bytes', candidates: 'Sequence[FormatName] | None' = None) -> 'FormatName'",
+          "where": "pkt_core\\codec\\container.py:130",
+          "doc": "Identify the container family and flavour."
+        },
+        "root_tag": {
+          "signature": "(xml: 'bytes') -> 'str'",
+          "where": "pkt_core\\codec\\container.py:80",
+          "doc": "Extract the root element name from an XML byte string without parsing it."
+        }
+      },
+      "exports": [
+        "Container",
+        "decode_bytes",
+        "decode",
+        "encode_bytes",
+        "encode",
+        "detect_format",
+        "root_tag",
+        "DEFAULT_FORMAT"
+      ]
+    },
+    "pkt_core.codec.qcompress": {
+      "classes": {},
+      "functions": {
+        "qcompress": {
+          "signature": "(data: 'bytes', level: 'int' = -1) -> 'bytes'",
+          "where": "pkt_core\\codec\\qcompress.py:63",
+          "doc": "Build a Qt ``qCompress`` payload."
+        },
+        "quncompress": {
+          "signature": "(payload: 'bytes') -> 'bytes'",
+          "where": "pkt_core\\codec\\qcompress.py:28",
+          "doc": "Inflate a Qt ``qCompress`` payload back to its original bytes."
+        }
+      },
+      "exports": [
+        "qcompress",
+        "quncompress",
+        "LENGTH_PREFIX_SIZE"
+      ]
+    },
+    "pkt_core.crypto.keys": {
+      "classes": {
+        "FormatSpec": {
+          "where": "pkt_core\\crypto\\keys.py:38",
+          "doc": "Everything needed to seal or open one container flavour.",
+          "methods": {
+            "is_legacy": {
+              "kind": "property"
+            },
+            "iv": {
+              "kind": "property"
+            },
+            "key": {
+              "kind": "property"
+            }
+          }
+        }
+      },
+      "functions": {
+        "expand_key": {
+          "signature": "(key_byte: 'int') -> 'bytes'",
+          "where": "pkt_core\\crypto\\keys.py:77",
+          "doc": "Expand a single byte into the 16-byte block-cipher key."
+        },
+        "expand_iv": {
+          "signature": "(iv_byte: 'int') -> 'bytes'",
+          "where": "pkt_core\\crypto\\keys.py:82",
+          "doc": "Expand a single byte into the 16-byte IV/nonce."
+        },
+        "get_format": {
+          "signature": "(name: 'FormatName') -> 'FormatSpec'",
+          "where": "pkt_core\\crypto\\keys.py:141",
+          "doc": "Look up a container flavour by name."
+        }
+      },
+      "exports": [
+        "BLOCK_SIZE",
+        "TAG_SIZE",
+        "FormatSpec",
+        "FORMATS",
+        "FormatName",
+        "expand_key",
+        "expand_iv",
+        "get_format"
+      ]
+    },
+    "pkt_core.resources": {
+      "classes": {},
+      "functions": {
+        "device_templates_path": {
+          "signature": "() -> 'str'",
+          "where": "pkt_core\\resources.py:36",
+          "doc": "Filesystem path of the bundled template library."
+        }
+      },
+      "exports": [
+        "device_templates_path",
+        "load_device_templates",
+        "load_network_seed"
+      ]
+    },
+    "pkt_core.models.lab": {
+      "classes": {
+        "RunningConfig": {
+          "where": "pkt_core\\models\\lab.py:22",
+          "doc": "Cisco IOS running configuration, stored as one ``<LINE>`` per line.",
+          "methods": {
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "iter_lines": {
+              "kind": "method",
+              "signature": "(self) -> 'Iterator[bytes]'"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "lines": {
+              "kind": "property"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "text": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        },
+        "Cluster": {
+          "where": "pkt_core\\models\\lab.py:51",
+          "doc": "A canvas grouping (clustering) in the topology view.",
+          "methods": {
+            "cluster_id": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "name": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "tiled_background": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        },
+        "LabOptions": {
+          "where": "pkt_core\\models\\lab.py:73",
+          "doc": "User-interface and display options for the workspace.",
+          "methods": {
+            "animation": {
+              "kind": "property"
+            },
+            "config_path": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "language": {
+              "kind": "property"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "password": {
+              "kind": "property"
+            },
+            "show_link_lights": {
+              "kind": "property"
+            },
+            "show_ports": {
+              "kind": "property"
+            },
+            "sound": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        },
+        "Network": {
+          "where": "pkt_core\\models\\lab.py:117",
+          "doc": "The ``<NETWORK>`` block: every device and every link.",
+          "methods": {
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "device_count": {
+              "kind": "property"
+            },
+            "device_named": {
+              "kind": "method",
+              "signature": "(self, name: 'str') -> 'Device | None'"
+            },
+            "devices": {
+              "kind": "property"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "link_count": {
+              "kind": "property"
+            },
+            "links": {
+              "kind": "property"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        },
+        "Lab": {
+          "where": "pkt_core\\models\\lab.py:147",
+          "doc": "A Packet Tracer document.",
+          "methods": {
+            "activity_password": {
+              "kind": "property"
+            },
+            "activity_sections": {
+              "kind": "property"
+            },
+            "canvas_shapes": {
+              "kind": "property"
+            },
+            "clusters": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "device_named": {
+              "kind": "method",
+              "signature": "(self, name: 'str') -> 'Device | None'"
+            },
+            "devices": {
+              "kind": "property"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "document": {
+              "kind": "property"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "environment_options": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "is_activity": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "links": {
+              "kind": "property"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "network": {
+              "kind": "property"
+            },
+            "options": {
+              "kind": "property"
+            },
+            "scoring_tree": {
+              "kind": "property"
+            },
+            "set_activity_password": {
+              "kind": "method",
+              "signature": "(self, value: 'str') -> 'None'"
+            },
+            "summary": {
+              "kind": "method",
+              "signature": "(self) -> 'dict[str, object]'"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            },
+            "version": {
+              "kind": "property"
+            }
+          }
+        }
+      },
+      "functions": {},
+      "exports": [
+        "RunningConfig",
+        "Cluster",
+        "LabOptions",
+        "Network",
+        "Lab"
+      ]
+    },
+    "pkt_core.models.network": {
+      "classes": {
+        "Port": {
+          "where": "pkt_core\\models\\network.py:36",
+          "doc": "A physical interface on a device.",
+          "methods": {
+            "auto_negotiate_duplex": {
+              "kind": "property"
+            },
+            "bandwidth": {
+              "kind": "property"
+            },
+            "burned_in_address": {
+              "kind": "property"
+            },
+            "channel": {
+              "kind": "property"
+            },
+            "clock_rate": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "description": {
+              "kind": "property"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "full_duplex": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "mac_address": {
+              "kind": "property"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            },
+            "type": {
+              "kind": "property"
+            }
+          }
+        },
+        "Module": {
+          "where": "pkt_core\\models\\network.py:91",
+          "doc": "A plug-in module, itself containing slots, sub-modules and ports.",
+          "methods": {
+            "all_ports": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "model": {
+              "kind": "property"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "ports": {
+              "kind": "property"
+            },
+            "slots": {
+              "kind": "property"
+            },
+            "submodules": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            },
+            "type": {
+              "kind": "property"
+            }
+          }
+        },
+        "Workspace": {
+          "where": "pkt_core\\models\\network.py:136",
+          "doc": "Canvas placement of a device.",
+          "methods": {
+            "cluster_id": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dev_addr": {
+              "kind": "property"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "logical": {
+              "kind": "property"
+            },
+            "mem_addr": {
+              "kind": "property"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "physical_path": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            },
+            "x": {
+              "kind": "property"
+            },
+            "y": {
+              "kind": "property"
+            }
+          }
+        },
+        "Device": {
+          "where": "pkt_core\\models\\network.py:179",
+          "doc": "A network device: router, switch, PC, server, AP, IoT component, ...",
+          "methods": {
+            "cluster_id": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "custom_model": {
+              "kind": "property"
+            },
+            "description": {
+              "kind": "property"
+            },
+            "details": {
+              "kind": "property"
+            },
+            "dev_addr": {
+              "kind": "property"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "engine": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "files": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "kind": {
+              "kind": "property"
+            },
+            "model": {
+              "kind": "property"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "modules": {
+              "kind": "property"
+            },
+            "name": {
+              "kind": "property"
+            },
+            "port_configs": {
+              "kind": "property"
+            },
+            "ports": {
+              "kind": "property"
+            },
+            "position": {
+              "kind": "property"
+            },
+            "power_state": {
+              "kind": "property"
+            },
+            "powered": {
+              "kind": "property"
+            },
+            "services": {
+              "kind": "property"
+            },
+            "set_name": {
+              "kind": "method",
+              "signature": "(self, value: 'str') -> 'None'"
+            },
+            "set_position": {
+              "kind": "method",
+              "signature": "(self, x: 'float', y: 'float') -> 'None'"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            },
+            "wireless": {
+              "kind": "property"
+            },
+            "workspace": {
+              "kind": "property"
+            }
+          }
+        },
+        "Cable": {
+          "where": "pkt_core\\models\\network.py:391",
+          "doc": "The physical cable behind a link, including which ports it joins.",
+          "methods": {
+            "cable_type": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "endpoints": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "from_device_addr": {
+              "kind": "property"
+            },
+            "from_ref": {
+              "kind": "property"
+            },
+            "functional": {
+              "kind": "property"
+            },
+            "geo_view_color": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "length": {
+              "kind": "property"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "ports": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_device_addr": {
+              "kind": "property"
+            },
+            "to_ref": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        },
+        "Link": {
+          "where": "pkt_core\\models\\network.py:453",
+          "doc": "A layer-1/2 connection between two device ports.",
+          "methods": {
+            "cable": {
+              "kind": "property"
+            },
+            "cable_type": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "endpoints": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "port_names": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            },
+            "type": {
+              "kind": "property"
+            }
+          }
+        }
+      },
+      "functions": {},
+      "exports": [
+        "Port",
+        "Module",
+        "Workspace",
+        "Device",
+        "Cable",
+        "Link",
+        "PowerState"
+      ]
+    },
+    "pkt_core.models.schema": {
+      "classes": {
+        "PortConfig": {
+          "where": "pkt_core\\models\\schema.py:45",
+          "doc": "IP addressing and DHCP state for an end-device interface.",
+          "methods": {
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dhcp_enabled": {
+              "kind": "property"
+            },
+            "dhcp_server": {
+              "kind": "property"
+            },
+            "dhcpv6_enabled": {
+              "kind": "property"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "dns": {
+              "kind": "property"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "gateway": {
+              "kind": "property"
+            },
+            "ip_address": {
+              "kind": "property"
+            },
+            "ipv6_addresses": {
+              "kind": "property"
+            },
+            "ipv6_enabled": {
+              "kind": "property"
+            },
+            "ipv6_link_local": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "mac_address": {
+              "kind": "property"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "port_name": {
+              "kind": "property"
+            },
+            "subnet_mask": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            },
+            "vlan": {
+              "kind": "property"
+            }
+          }
+        },
+        "WirelessConfig": {
+          "where": "pkt_core\\models\\schema.py:130",
+          "doc": "Wireless association parameters (SSID, auth, encryption, radio).",
+          "methods": {
+            "auth_type": {
+              "kind": "property"
+            },
+            "channel": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "encryption": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "network_mode": {
+              "kind": "property"
+            },
+            "network_type": {
+              "kind": "property"
+            },
+            "profile": {
+              "kind": "property"
+            },
+            "radio_band": {
+              "kind": "property"
+            },
+            "ssid": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            },
+            "wep_key": {
+              "kind": "property"
+            }
+          }
+        },
+        "DeviceDetails": {
+          "where": "pkt_core\\models\\schema.py:182",
+          "doc": "Device inventory metadata: sys contact/location, serial, 3D coords.",
+          "methods": {
+            "coordinates": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "custom_vars": {
+              "kind": "property"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "firmware_version": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "serial_number": {
+              "kind": "property"
+            },
+            "sys_contact": {
+              "kind": "property"
+            },
+            "sys_location": {
+              "kind": "property"
+            },
+            "sys_name": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        },
+        "FileEntry": {
+          "where": "pkt_core\\models\\schema.py:241",
+          "doc": "One entry in a device's simulated filesystem.",
+          "methods": {
+            "content": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "is_bootable": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "modified": {
+              "kind": "property"
+            },
+            "name": {
+              "kind": "property"
+            },
+            "path": {
+              "kind": "property"
+            },
+            "permission": {
+              "kind": "property"
+            },
+            "size": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        },
+        "ScoringNode": {
+          "where": "pkt_core\\models\\schema.py:282",
+          "doc": "One node of a scored activity's grading tree.",
+          "methods": {
+            "children": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "name": {
+              "kind": "property"
+            },
+            "node_id": {
+              "kind": "property"
+            },
+            "points": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            },
+            "value": {
+              "kind": "property"
+            }
+          }
+        },
+        "EnvironmentOption": {
+          "where": "pkt_core\\models\\schema.py:326",
+          "doc": "One IoT/simulation environment option.",
+          "methods": {
+            "active": {
+              "kind": "property"
+            },
+            "category": {
+              "kind": "property"
+            },
+            "category_id": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "imperial_unit": {
+              "kind": "property"
+            },
+            "interpolate": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "maximum": {
+              "kind": "property"
+            },
+            "metric_unit": {
+              "kind": "property"
+            },
+            "minimum": {
+              "kind": "property"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            },
+            "value": {
+              "kind": "property"
+            }
+          }
+        },
+        "CanvasShape": {
+          "where": "pkt_core\\models\\schema.py:381",
+          "doc": "A drawing primitive on the topology canvas (line, rect, ellipse, polygon).",
+          "methods": {
+            "bounds": {
+              "kind": "property"
+            },
+            "color": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "endpoints": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "fill_color": {
+              "kind": "property"
+            },
+            "filled": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "label": {
+              "kind": "property"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "opacity": {
+              "kind": "property"
+            },
+            "rotation": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            },
+            "z_order": {
+              "kind": "property"
+            }
+          }
+        },
+        "ActivitySection": {
+          "where": "pkt_core\\models\\schema.py:454",
+          "doc": "A named section of a scored activity.",
+          "methods": {
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "instructions_html": {
+              "kind": "property"
+            },
+            "is_instructions": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "name": {
+              "kind": "property"
+            },
+            "nodes": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        }
+      },
+      "functions": {},
+      "exports": [
+        "PortConfig",
+        "WirelessConfig",
+        "DeviceDetails",
+        "FileEntry",
+        "ScoringNode",
+        "EnvironmentOption",
+        "CanvasShape",
+        "ActivitySection"
+      ]
+    },
+    "pkt_core.models.services": {
+      "classes": {
+        "AaaClient": {
+          "where": "pkt_core\\models\\services.py:107",
+          "doc": "One RADIUS/TACACS+ client entry of an AAA (``ACS``) server.",
+          "methods": {
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "description": {
+              "kind": "property"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "host_ip": {
+              "kind": "property"
+            },
+            "identity": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "key": {
+              "kind": "property"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "server_type": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        },
+        "AaaUser": {
+          "where": "pkt_core\\models\\services.py:137",
+          "doc": "One local account of an AAA (``ACS``) server.",
+          "methods": {
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "description": {
+              "kind": "property"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "identity": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "name": {
+              "kind": "property"
+            },
+            "password": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        },
+        "DhcpPool": {
+          "where": "pkt_core\\models\\services.py:159",
+          "doc": "One DHCP pool.",
+          "methods": {
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "default_router": {
+              "kind": "property"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "dns_server": {
+              "kind": "property"
+            },
+            "domain_name": {
+              "kind": "property"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "end_ip": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "identity": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "lease_time": {
+              "kind": "property"
+            },
+            "leases": {
+              "kind": "property"
+            },
+            "mask": {
+              "kind": "property"
+            },
+            "max_users": {
+              "kind": "property"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "name": {
+              "kind": "property"
+            },
+            "network": {
+              "kind": "property"
+            },
+            "scope": {
+              "kind": "property"
+            },
+            "start_ip": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        },
+        "DnsRecord": {
+          "where": "pkt_core\\models\\services.py:232",
+          "doc": "One record of a DNS server's ``NAMESERVER-DATABASE``.",
+          "methods": {
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "identity": {
+              "kind": "property"
+            },
+            "ip_address": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "name": {
+              "kind": "property"
+            },
+            "record_type": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            },
+            "ttl": {
+              "kind": "property"
+            },
+            "zone_key": {
+              "kind": "property"
+            }
+          }
+        },
+        "FtpAccount": {
+          "where": "pkt_core\\models\\services.py:263",
+          "doc": "One FTP account (``FTP_SERVER/USER_ACCOUNT_MNGR/ACCOUNT``).",
+          "methods": {
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "identity": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "password": {
+              "kind": "property"
+            },
+            "permissions": {
+              "kind": "property"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            },
+            "username": {
+              "kind": "property"
+            }
+          }
+        },
+        "DeviceServices": {
+          "where": "pkt_core\\models\\services.py:285",
+          "doc": "The service record lists of one device's ``<ENGINE>`` block.",
+          "methods": {
+            "aaa_clients": {
+              "kind": "property"
+            },
+            "aaa_users": {
+              "kind": "property"
+            },
+            "copy": {
+              "kind": "method",
+              "signature": "(self, *, include: 'AbstractSetIntStr | MappingIntStrAny | None' = None, exclude: 'AbstractSetIntStr | MappingIntStrAny | None' = None, update: 'Dict[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "dhcp_pools": {
+              "kind": "property"
+            },
+            "dict": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False) -> 'Dict[str, Any]'"
+            },
+            "dns_records": {
+              "kind": "property"
+            },
+            "element": {
+              "kind": "property"
+            },
+            "extra_fields": {
+              "kind": "property"
+            },
+            "ftp_accounts": {
+              "kind": "property"
+            },
+            "json": {
+              "kind": "method",
+              "signature": "(self, *, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, by_alias: 'bool' = False, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, encoder: 'Callable[[Any], Any] | None' = PydanticUndefined, models_as_dict: 'bool' = PydanticUndefined, **dumps_kwargs: 'Any') -> 'str'"
+            },
+            "model_copy": {
+              "kind": "method",
+              "signature": "(self, *, update: 'Mapping[str, Any] | None' = None, deep: 'bool' = False) -> 'Self'"
+            },
+            "model_dump": {
+              "kind": "method",
+              "signature": "(self, *, mode: \"Literal['json', 'python'] | str\" = 'python', include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'Dict[str, Any]'"
+            },
+            "model_dump_json": {
+              "kind": "method",
+              "signature": "(self, *, indent: 'int | None' = None, ensure_ascii: 'bool' = False, include: 'IncEx | None' = None, exclude: 'IncEx | None' = None, context: 'Any | None' = None, by_alias: 'bool | None' = None, exclude_unset: 'bool' = False, exclude_defaults: 'bool' = False, exclude_none: 'bool' = False, exclude_computed_fields: 'bool' = False, round_trip: 'bool' = False, warnings: \"bool | Literal['none', 'warn', 'error']\" = True, fallback: 'Callable[[Any], Any] | None' = None, serialize_as_any: 'bool' = False, polymorphic_serialization: 'bool | None' = None) -> 'str'"
+            },
+            "model_extra": {
+              "kind": "property"
+            },
+            "model_fields_set": {
+              "kind": "property"
+            },
+            "model_post_init": {
+              "kind": "method",
+              "signature": "(self: 'BaseModel', context: 'Any', /) -> 'None'"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "to_xml": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        }
+      },
+      "functions": {
+        "zone_identity": {
+          "signature": "(identity: 'Identity') -> 'Identity'",
+          "where": "pkt_core\\models\\services.py:89",
+          "doc": "Project a DNS record identity onto its per-server zone key."
+        }
+      },
+      "exports": [
+        "AaaClient",
+        "AaaUser",
+        "DhcpPool",
+        "DnsRecord",
+        "FtpAccount",
+        "DeviceServices",
+        "Identity",
+        "IDENTITY_FIELDS",
+        "IDENTITY_LABELS",
+        "ZONE_KEY_FIELDS",
+        "zone_identity"
+      ]
+    },
+    "pkt_core.xml.nodes": {
+      "classes": {
+        "XmlText": {
+          "where": "pkt_core\\xml\\nodes.py:30",
+          "doc": "Raw character data between tags.",
+          "methods": {
+            "dirty": {
+              "kind": "property"
+            },
+            "text": {
+              "kind": "property"
+            },
+            "to_bytes": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        },
+        "XmlElement": {
+          "where": "pkt_core\\xml\\nodes.py:53",
+          "doc": "An element: start tag, children, end tag -- with its original bytes.",
+          "methods": {
+            "append": {
+              "kind": "method",
+              "signature": "(self, child: \"'XmlNode'\") -> 'None'"
+            },
+            "append_text": {
+              "kind": "method",
+              "signature": "(self, data: 'bytes') -> 'None'"
+            },
+            "dirty": {
+              "kind": "property"
+            },
+            "find": {
+              "kind": "method",
+              "signature": "(self, name: 'str') -> \"'XmlElement | None'\""
+            },
+            "find_all": {
+              "kind": "method",
+              "signature": "(self, name: 'str') -> \"list['XmlElement']\""
+            },
+            "get": {
+              "kind": "method",
+              "signature": "(self, name: 'str') -> 'str | None'"
+            },
+            "iter_elements": {
+              "kind": "method",
+              "signature": "(self) -> \"Iterator['XmlElement']\""
+            },
+            "remove": {
+              "kind": "method",
+              "signature": "(self, child: \"'XmlNode'\") -> 'None'"
+            },
+            "set": {
+              "kind": "method",
+              "signature": "(self, name: 'str', value: 'str') -> 'None'"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "text": {
+              "kind": "property"
+            },
+            "to_bytes": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        },
+        "XmlDocument": {
+          "where": "pkt_core\\xml\\nodes.py:180",
+          "doc": "A whole document, held as source bytes with a **lazily** built tree.",
+          "methods": {
+            "dirty": {
+              "kind": "property"
+            },
+            "epilogue": {
+              "kind": "property"
+            },
+            "prologue": {
+              "kind": "property"
+            },
+            "root": {
+              "kind": "property"
+            },
+            "root_tag": {
+              "kind": "property"
+            },
+            "to_bytes": {
+              "kind": "method",
+              "signature": "(self) -> 'bytes'"
+            }
+          }
+        }
+      },
+      "functions": {
+        "parse_xml_bytes": {
+          "signature": "(data: 'bytes') -> 'XmlDocument'",
+          "where": "pkt_core\\xml\\nodes.py:423",
+          "doc": "Parse a Packet Tracer document, preserving every source byte."
+        },
+        "parse_xml": {
+          "signature": "(data: 'str') -> 'XmlDocument'",
+          "where": "pkt_core\\xml\\nodes.py:454",
+          "doc": "Parse a document given as text (encoded to UTF-8 first)."
+        }
+      },
+      "exports": [
+        "XmlNode",
+        "XmlText",
+        "XmlElement",
+        "XmlDocument",
+        "parse_xml_bytes",
+        "parse_xml"
+      ]
+    },
+    "pkt_core.xml.writer": {
+      "classes": {},
+      "functions": {
+        "write_xml": {
+          "signature": "(doc: 'XmlDocument') -> 'bytes'",
+          "where": "pkt_core\\xml\\writer.py:16",
+          "doc": "Serialise a document back to bytes."
+        },
+        "element": {
+          "signature": "(name: 'str', **attrs: 'str') -> 'XmlElement'",
+          "where": "pkt_core\\xml\\writer.py:25",
+          "doc": "Build a new element with text attributes (used when authoring)."
+        },
+        "text": {
+          "signature": "(data: 'str | bytes') -> 'XmlText'",
+          "where": "pkt_core\\xml\\writer.py:37",
+          "doc": "Build a text node from a string (encoded UTF-8) or raw bytes."
+        }
+      },
+      "exports": [
+        "write_xml",
+        "element",
+        "text"
+      ]
+    },
+    "pkt_core.audit": {
+      "classes": {
+        "ElementView": {
+          "where": "pkt_core\\audit.py:105",
+          "doc": "Structural view of one XML element, satisfied by both tree flavours.",
+          "methods": {
+            "child": {
+              "kind": "method",
+              "signature": "(self, name: 'str') -> \"'ElementView | None'\""
+            },
+            "descendants": {
+              "kind": "method",
+              "signature": "(self) -> \"Iterator['ElementView']\""
+            },
+            "element_children": {
+              "kind": "method",
+              "signature": "(self) -> \"list['ElementView']\""
+            },
+            "remove": {
+              "kind": "method",
+              "signature": "(self, child: \"'ElementView'\") -> 'None'"
+            },
+            "tag": {
+              "kind": "property"
+            },
+            "text_of": {
+              "kind": "method",
+              "signature": "(self, name: 'str') -> 'str'"
+            }
+          }
+        },
+        "RecordFamily": {
+          "where": "pkt_core\\audit.py:200",
+          "doc": "One counted service record list under a device's ``<ENGINE>``.",
+          "methods": {}
+        },
+        "LeftoverRule": {
+          "where": "pkt_core\\audit.py:275",
+          "doc": "One record list that harvested templates carry and generators do not author.",
+          "methods": {}
+        },
+        "TemplateLeftovers": {
+          "where": "pkt_core\\audit.py:314",
+          "doc": "Identities carried by harvested device templates, per device model.",
+          "methods": {
+            "for_model": {
+              "kind": "method",
+              "signature": "(self, model: 'str') -> 'Mapping[str, frozenset[Identity]]'"
+            },
+            "is_leftover": {
+              "kind": "method",
+              "signature": "(self, model: 'str', family: 'str', identity: 'Identity') -> 'bool'"
+            }
+          }
+        },
+        "DedupCount": {
+          "where": "pkt_core\\audit.py:393",
+          "doc": "Occurrence accounting for one counted family.",
+          "methods": {
+            "as_dict": {
+              "kind": "method",
+              "signature": "(self) -> 'dict[str, object]'"
+            },
+            "authored": {
+              "kind": "property"
+            },
+            "authored_distinct": {
+              "kind": "property"
+            },
+            "authored_instances": {
+              "kind": "property"
+            },
+            "describe": {
+              "kind": "method",
+              "signature": "(self) -> 'str'"
+            },
+            "distinct": {
+              "kind": "property"
+            },
+            "duplicate_instances": {
+              "kind": "property"
+            },
+            "duplicates": {
+              "kind": "property"
+            },
+            "leftover_instances": {
+              "kind": "property"
+            },
+            "occurrences": {
+              "kind": "property"
+            },
+            "raw": {
+              "kind": "property"
+            },
+            "unique": {
+              "kind": "property"
+            }
+          }
+        },
+        "ServiceInventory": {
+          "where": "pkt_core\\audit.py:540",
+          "doc": "Raw and distinct counts for every counted item of a lab.",
+          "methods": {
+            "as_dict": {
+              "kind": "method",
+              "signature": "(self) -> 'dict[str, object]'"
+            },
+            "count": {
+              "kind": "method",
+              "signature": "(self, family: 'str') -> 'DedupCount'"
+            },
+            "families": {
+              "kind": "property"
+            },
+            "summary": {
+              "kind": "method",
+              "signature": "(self) -> 'str'"
+            }
+          }
+        },
+        "ConfigLineStats": {
+          "where": "pkt_core\\audit.py:498",
+          "doc": "Reproducible configuration-line counts (problem 17).",
+          "methods": {
+            "as_dict": {
+              "kind": "method",
+              "signature": "(self) -> 'dict[str, int]'"
+            },
+            "describe": {
+              "kind": "method",
+              "signature": "(self) -> 'str'"
+            }
+          }
+        },
+        "SanitizeReport": {
+          "where": "pkt_core\\audit.py:724",
+          "doc": "What a sanitiser removed, per rule label.",
+          "methods": {
+            "as_dict": {
+              "kind": "method",
+              "signature": "(self) -> 'dict[str, int]'"
+            },
+            "describe": {
+              "kind": "method",
+              "signature": "(self) -> 'str'"
+            },
+            "merge": {
+              "kind": "method",
+              "signature": "(self, other: \"'SanitizeReport'\") -> \"'SanitizeReport'\""
+            },
+            "total": {
+              "kind": "property"
+            }
+          }
+        },
+        "Finding": {
+          "where": "pkt_core\\audit.py:915",
+          "doc": "One validation result.  ``code`` is stable; ``message`` is for humans.",
+          "methods": {}
+        },
+        "ValidationReport": {
+          "where": "pkt_core\\audit.py:924",
+          "doc": "Findings plus the inventory they were derived from.",
+          "methods": {
+            "codes": {
+              "kind": "method",
+              "signature": "(self) -> 'tuple[str, ...]'"
+            },
+            "failures": {
+              "kind": "property"
+            },
+            "ok": {
+              "kind": "property"
+            },
+            "summary": {
+              "kind": "method",
+              "signature": "(self) -> 'str'"
+            },
+            "warnings": {
+              "kind": "property"
+            }
+          }
+        }
+      },
+      "functions": {
+        "as_view": {
+          "signature": "(el: 'XmlElement | StdlibElement | ElementView') -> 'ElementView'",
+          "where": "pkt_core\\audit.py:186",
+          "doc": "Adapt a pkt_core element, a stdlib ElementTree element, or a view."
+        },
+        "inventory": {
+          "signature": "(lab: 'Lab', *, leftovers: 'TemplateLeftovers | None' = None) -> 'ServiceInventory'",
+          "where": "pkt_core\\audit.py:663",
+          "doc": "Count every service record and prove what is distinct."
+        },
+        "sanitize_engine": {
+          "signature": "(engine: 'XmlElement | StdlibElement | ElementView', *, model: 'str' = '', leftovers: 'TemplateLeftovers | None' = None, rules: 'Sequence[LeftoverRule]' = (LeftoverRule(container='ACS_CLIENTS', record='CLIENT', label='aaa-clients'), LeftoverRule(container='USERS', record='USER', label='aaa-users'), LeftoverRule(container='POOLS', record='POOL', label='dhcp-pools'), LeftoverRule(container='ASSOCIATED_PORTS', record='ASSOCIATED_PORT', label='dhcp-port-bindings'), LeftoverRule(container='NAMESERVER-DATABASE', record='RESOURCE-RECORD', label='dns-records'), LeftoverRule(container='USER_ACCOUNT_MNGR', record='ACCOUNT', label='ftp-accounts'), LeftoverRule(container='DHCP_POOL_LEASES', record='*', label='dhcp-leases'), LeftoverRule(container='DHCP_RESERVATIONS', record='*', label='dhcp-reservations'))) -> 'SanitizeReport'",
+          "where": "pkt_core\\audit.py:815",
+          "doc": "Strip template leftovers from one ``<ENGINE>`` (or ``<DEVICE>``) element."
+        },
+        "sanitize_template_leftovers": {
+          "signature": "(target: 'Lab | Device | XmlElement | StdlibElement', *, leftovers: 'TemplateLeftovers | None' = None, rules: 'Sequence[LeftoverRule]' = (LeftoverRule(container='ACS_CLIENTS', record='CLIENT', label='aaa-clients'), LeftoverRule(container='USERS', record='USER', label='aaa-users'), LeftoverRule(container='POOLS', record='POOL', label='dhcp-pools'), LeftoverRule(container='ASSOCIATED_PORTS', record='ASSOCIATED_PORT', label='dhcp-port-bindings'), LeftoverRule(container='NAMESERVER-DATABASE', record='RESOURCE-RECORD', label='dns-records'), LeftoverRule(container='USER_ACCOUNT_MNGR', record='ACCOUNT', label='ftp-accounts'), LeftoverRule(container='DHCP_POOL_LEASES', record='*', label='dhcp-leases'), LeftoverRule(container='DHCP_RESERVATIONS', record='*', label='dhcp-reservations'))) -> 'SanitizeReport'",
+          "where": "pkt_core\\audit.py:859",
+          "doc": "Strip unauthored template leftovers from a lab, a device, or one element."
+        },
+        "sanitize_xml": {
+          "signature": "(xml: 'bytes', *, leftovers: 'TemplateLeftovers | None' = None) -> 'tuple[bytes, SanitizeReport]'",
+          "where": "pkt_core\\audit.py:896",
+          "doc": "Sanitise a whole document's XML bytes; returns ``(new xml, report)``."
+        },
+        "strip_service_records": {
+          "signature": "(target: 'Lab | Device | XmlElement | StdlibElement', *, rules: 'Sequence[LeftoverRule]' = (LeftoverRule(container='ACS_CLIENTS', record='CLIENT', label='aaa-clients'), LeftoverRule(container='USERS', record='USER', label='aaa-users'), LeftoverRule(container='POOLS', record='POOL', label='dhcp-pools'), LeftoverRule(container='ASSOCIATED_PORTS', record='ASSOCIATED_PORT', label='dhcp-port-bindings'), LeftoverRule(container='NAMESERVER-DATABASE', record='RESOURCE-RECORD', label='dns-records'), LeftoverRule(container='USER_ACCOUNT_MNGR', record='ACCOUNT', label='ftp-accounts'), LeftoverRule(container='DHCP_POOL_LEASES', record='*', label='dhcp-leases'), LeftoverRule(container='DHCP_RESERVATIONS', record='*', label='dhcp-reservations'))) -> 'SanitizeReport'",
+          "where": "pkt_core\\audit.py:846",
+          "doc": "Remove *every* service record from device(s) \u2014 a blank slate."
+        },
+        "validate_lab": {
+          "signature": "(lab: 'Lab', *, leftovers: 'TemplateLeftovers | None' = None) -> 'ValidationReport'",
+          "where": "pkt_core\\audit.py:972",
+          "doc": "Prove every counted item distinct (and free of template leftovers)."
+        }
+      },
+      "exports": [
+        "Identity",
+        "ElementView",
+        "as_view",
+        "RecordFamily",
+        "SERVICE_FAMILIES",
+        "LeftoverRule",
+        "DEFAULT_LEFTOVER_RULES",
+        "TemplateLeftovers",
+        "DedupCount",
+        "ServiceInventory",
+        "ConfigLineStats",
+        "SanitizeReport",
+        "Finding",
+        "ValidationReport",
+        "inventory",
+        "sanitize_engine",
+        "sanitize_template_leftovers",
+        "sanitize_xml",
+        "strip_service_records",
+        "validate_lab"
+      ]
+    },
+    "pkt_core.export": {
+      "classes": {
+        "ExportError": {
+          "where": "pkt_core\\export.py:25",
+          "doc": "An unknown export format was requested.",
+          "methods": {}
+        }
+      },
+      "functions": {
+        "export": {
+          "signature": "(lab: 'Lab', fmt: 'str') -> 'str'",
+          "where": "pkt_core\\export.py:229",
+          "doc": "Render ``lab`` in the named format."
+        },
+        "to_graphviz": {
+          "signature": "(lab: 'Lab', *, name: 'str' = 'topology') -> 'str'",
+          "where": "pkt_core\\export.py:81",
+          "doc": "Render the topology as a Graphviz DOT graph."
+        },
+        "to_netbox": {
+          "signature": "(lab: 'Lab') -> 'str'",
+          "where": "pkt_core\\export.py:122",
+          "doc": "Render devices and interfaces as a NetBox-style JSON inventory."
+        },
+        "to_containerlab": {
+          "signature": "(lab: 'Lab', *, topology_name: 'str' = 'pkt') -> 'str'",
+          "where": "pkt_core\\export.py:187",
+          "doc": "Render the topology as a containerlab topology YAML stub."
+        }
+      },
+      "exports": [
+        "EXPORTERS",
+        "export",
+        "to_graphviz",
+        "to_netbox",
+        "to_containerlab",
+        "ExportError"
+      ]
+    },
+    "pkt_core.diff": {
+      "classes": {
+        "DeviceDiff": {
+          "where": "pkt_core\\diff.py:23",
+          "doc": "How one device differs between two documents.",
+          "methods": {}
+        },
+        "LinkDiff": {
+          "where": "pkt_core\\diff.py:34",
+          "doc": "How one link differs between two documents.",
+          "methods": {}
+        },
+        "ConfigDiff": {
+          "where": "pkt_core\\diff.py:44",
+          "doc": "Line-level change in a device's IOS running configuration.",
+          "methods": {}
+        },
+        "LabDiff": {
+          "where": "pkt_core\\diff.py:53",
+          "doc": "The complete semantic difference between two documents.",
+          "methods": {
+            "identical": {
+              "kind": "property"
+            },
+            "summary_lines": {
+              "kind": "method",
+              "signature": "(self) -> 'list[str]'"
+            }
+          }
+        }
+      },
+      "functions": {
+        "diff_labs": {
+          "signature": "(a: 'Lab', b: 'Lab') -> 'LabDiff'",
+          "where": "pkt_core\\diff.py:136",
+          "doc": "Compare two documents semantically."
+        }
+      },
+      "exports": [
+        "DeviceDiff",
+        "LinkDiff",
+        "ConfigDiff",
+        "LabDiff",
+        "diff_labs"
+      ]
+    }
+  }
+}
