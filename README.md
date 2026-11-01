@@ -136,6 +136,21 @@ python genlab.py specifications/mylab.json --pt-version 9.0.1.0858
 and services you want). The tool holds the correct Packet Tracer formats, so the
 output is always a valid, openable file.
 
+### Make your file unique (so no two people's files match)
+
+Add `--seed` with your name or roll number. It nudges device positions (and fills
+a blank web page) from your seed, so your `.pkt` is non-identical to everyone
+else's — byte-for-byte and visibly — while the topology and services stay
+correct. Same seed always rebuilds the same file.
+
+```bat
+python genlab.py specifications/mylab.json --seed "Your Name 22F-1234" --pt-version 9.0.1.0858
+```
+
+Two different seeds → two clearly different files; the same seed → the exact same
+file every time. (The `AI_PROMPT.md` prompt already asks the AI to write you a
+unique web page and to include this `--seed` in the command.)
+
 ---
 
 ## Part 4 — Opening in Packet Tracer / version mismatch

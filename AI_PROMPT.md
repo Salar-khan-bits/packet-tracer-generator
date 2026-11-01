@@ -56,12 +56,19 @@ RULES:
   "email" block (user/password matching an account). Laptops can't be pre-filled —
   leave their "email" out.
 - Keep x spread ~125 apart on one row (y=420) for clients; switch y=250; server y=110.
+- UNIQUENESS: unless the person pasted their own HTML, write a UNIQUE "http" page
+  for THIS person — include their name/roll, and vary the wording, headings and
+  colors so no two students' pages match. Never copy the example page text.
+
+YOUR IDENTITY (used to personalise the web page and make your files unique):
+<<< YOUR NAME + ROLL NUMBER >>>
 
 THE TASK:
 <<< PASTE THE FULL TASK TEXT HERE >>>
 
-Output ONLY the JSON. Also tell me the exact command to run it, in the form:
-  python genlab.py specifications/<name>.json --pt-version <<< YOUR PACKET TRACER BUILD >>>
+Output ONLY the JSON. Also print the exact command to run it, in this form — the
+--seed makes YOUR .pkt non-identical to everyone else's:
+  python genlab.py specifications/<name>.json --seed "<<< YOUR NAME + ROLL NUMBER >>>" --pt-version <<< YOUR PACKET TRACER BUILD >>>
 ```
 
 ---

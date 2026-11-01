@@ -40,6 +40,7 @@ Spec shape (see specifications/example_lan.json):
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -87,7 +88,32 @@ def _source_port(model: str, n: int) -> str:
     return "FastEthernet0"            # PC / laptop / server NIC
 
 
-def build(spec: dict, pt_version: str | None) -> tuple[Lab, str]:
+def _jitter(seed: str, name: str, spread: int = 22) -> tuple[int, int]:
+    """Deterministic small (dx, dy) offset for a device, derived from the seed.
+
+    Same seed + name always gives the same offset (reproducible), but a different
+    seed gives different positions — enough to make each person's file non-identical
+    in both bytes and visible layout. Positions are cosmetic, so this never affects
+    addressing, cabling or services.
+    """
+    h = hashlib.sha256(("%s|%s" % (seed, name)).encode("utf-8")).digest()
+    dx = (h[0] % (2 * spread + 1)) - spread
+    dy = (h[1] % (2 * spread + 1)) - spread
+    return dx, dy
+
+
+def _unique_page(seed: str) -> str:
+    """A simple, per-person web page used when a spec provides no HTML."""
+    tag = hashlib.sha256(seed.encode("utf-8")).hexdigest()[:8]
+    return (
+        "<html><head><title>%s</title></head><body>"
+        "<center><h1>Lab of %s</h1></center>"
+        "<p>This page is served over HTTP by the Packet Tracer server.</p>"
+        "<p>Reference: %s</p></body></html>" % (seed, seed, tag)
+    )
+
+
+def build(spec: dict, pt_version: str | None, seed: str | None = None) -> tuple[Lab, str]:
     mask = spec.get("mask", "255.255.255.0")
     lab = Lab()
     lab.prune_seed_devices()
@@ -99,7 +125,11 @@ def build(spec: dict, pt_version: str | None) -> tuple[Lab, str]:
     # 1) devices
     for d in spec.get("devices", []):
         name, model = d["name"], d["model"]
-        kwargs = dict(x=int(d.get("x", 100)), y=int(d.get("y", 100)))
+        x, y = int(d.get("x", 100)), int(d.get("y", 100))
+        if seed:                       # per-person nudge -> non-identical files
+            dx, dy = _jitter(seed, name)
+            x, y = max(20, x + dx), max(20, y + dy)
+        kwargs = dict(x=x, y=y)
         if d.get("ip"):
             kwargs["pc_ip"] = [d["ip"], mask, d.get("gateway", "0.0.0.0")]
         if d.get("ios_config"):
@@ -164,8 +194,13 @@ def build(spec: dict, pt_version: str | None) -> tuple[Lab, str]:
             e = s["email"]
             svc.author_email(lab, srv, domain=e.get("domain", "mail.com"),
                              accounts=[tuple(a) for a in e.get("accounts", [])])
-        if s.get("http"):
-            svc.author_http(lab, srv, s["http"])
+        # user-specified HTML is used as-is; otherwise, with a seed, a unique
+        # per-person page is generated so no two files share the same page.
+        page = s.get("http")
+        if not page and seed and "http" in s:   # http requested but left blank
+            page = _unique_page(seed)
+        if page:
+            svc.author_http(lab, srv, page)
 
     if pt_version:
         svc.set_version(lab, pt_version)
@@ -178,10 +213,13 @@ def main(argv=None) -> int:
     ap.add_argument("-o", "--output", type=Path, help="output .pkt (default generated/<name>.pkt)")
     ap.add_argument("--pt-version", default=os.environ.get("PT_VERSION"),
                     help="stamp <VERSION> for an older PT (e.g. 8.2.2.0400); or set $PT_VERSION")
+    ap.add_argument("--seed", default=None,
+                    help="your name or roll number: makes YOUR .pkt non-identical to "
+                         "everyone else's (nudges device positions; fills a blank web page)")
     args = ap.parse_args(argv)
 
     spec = json.loads(args.spec.read_text(encoding="utf-8"))
-    lab, name = build(spec, args.pt_version)
+    lab, name = build(spec, args.pt_version, seed=args.seed)
 
     out = args.output or (_ROOT / "generated" / ("%s.pkt" % name))
     out.parent.mkdir(parents=True, exist_ok=True)
