@@ -261,20 +261,24 @@ def main(argv=None) -> int:
     ap.add_argument("--seed", default=None,
                     help="your name or roll number: makes YOUR .pkt non-identical to "
                          "everyone else's (nudges device positions; fills a blank web page)")
-    ap.add_argument("--vary-ip", action="store_true",
-                    help="opt-in: shift the LAN subnet per person (only if the task lets "
-                         "you choose your own addresses)")
-    ap.add_argument("--vary-mail", action="store_true",
-                    help="opt-in: shift the email domain per person (only if the task lets "
-                         "you choose your own accounts)")
+    # With --seed, the subnet and email domain vary per person BY DEFAULT.
+    # Opt out when the task pins specific values:
+    ap.add_argument("--keep-ip", action="store_true",
+                    help="keep the task's exact subnet/IPs (use when the task REQUIRES a "
+                         "specific subnet); otherwise --seed varies it per person")
+    ap.add_argument("--keep-mail", action="store_true",
+                    help="keep the task's exact email domain (use when the task REQUIRES a "
+                         "specific domain); otherwise --seed varies it per person")
+    # accepted for compatibility; variation is already on by default with --seed
+    ap.add_argument("--vary-ip", action="store_true", help=argparse.SUPPRESS)
+    ap.add_argument("--vary-mail", action="store_true", help=argparse.SUPPRESS)
     args = ap.parse_args(argv)
 
     spec = json.loads(args.spec.read_text(encoding="utf-8"))
-    if (args.vary_ip or args.vary_mail):
-        if not args.seed:
-            print("error: --vary-ip/--vary-mail need --seed \"<your name/roll>\"", file=sys.stderr)
-            return 2
-        spec, changed = vary_spec(spec, args.seed, vary_ip=args.vary_ip, vary_mail=args.vary_mail)
+    vary_ip = bool(args.seed) and not args.keep_ip
+    vary_mail = bool(args.seed) and not args.keep_mail
+    if args.seed and (vary_ip or vary_mail):
+        spec, changed = vary_spec(spec, args.seed, vary_ip=vary_ip, vary_mail=vary_mail)
         for key, val in changed.items():
             print("varied %-7s-> %s   (write THIS in your answer)" % (key, val))
     lab, name = build(spec, args.pt_version, seed=args.seed)

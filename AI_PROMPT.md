@@ -67,8 +67,13 @@ THE TASK:
 <<< PASTE THE FULL TASK TEXT HERE >>>
 
 Output ONLY the JSON. Also print the exact command to run it, in this form — the
---seed makes YOUR .pkt non-identical to everyone else's:
+--seed makes YOUR .pkt non-identical to everyone else's (it also varies the subnet
+and email domain per person by default):
   python genlab.py specifications/<name>.json --seed "<<< YOUR NAME + ROLL NUMBER >>>" --pt-version <<< YOUR PACKET TRACER BUILD >>>
+
+IMPORTANT: if the task REQUIRES a specific subnet / IP plan, append --keep-ip; if
+it REQUIRES a specific email domain, append --keep-mail (so those exact values are
+kept). If the task lets the student choose, leave them off (defaults vary them).
 ```
 
 ---
