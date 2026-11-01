@@ -151,6 +151,22 @@ Two different seeds → two clearly different files; the same seed → the exact
 file every time. (The `AI_PROMPT.md` prompt already asks the AI to write you a
 unique web page and to include this `--seed` in the command.)
 
+**By default, IP addresses and email accounts stay exactly as the task/spec says**
+(because tasks often require specific values). If your task lets you *choose* your
+own addressing/accounts and you want those unique too, add:
+
+```bat
+python genlab.py specifications/mylab.json --seed "Your Name 22F-1234" --vary-ip --vary-mail
+```
+
+- `--vary-ip` shifts the whole LAN to a per-person `192.168.N.0/24` (server, DHCP
+  pool, DNS, gateway all move together).
+- `--vary-mail` shifts the email domain per person (e.g. `example-ab12.test`).
+
+The command prints the exact subnet/domain it used — **write those same values in
+your answer** so your report matches your file. ⚠️ Only use these when the task
+does **not** pin a specific subnet or account names.
+
 ---
 
 ## Part 4 — Opening in Packet Tracer / version mismatch

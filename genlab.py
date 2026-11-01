@@ -113,6 +113,51 @@ def _unique_page(seed: str) -> str:
     )
 
 
+def vary_spec(spec: dict, seed: str, *, vary_ip: bool, vary_mail: bool) -> tuple[dict, dict]:
+    """Opt-in: coherently shift the LAN subnet and/or the mail domain per person.
+
+    Works on single-/24-LAN specs (the common case): every address sharing the
+    LAN's ``192.168.N.`` prefix moves together, so server IP, DHCP pool, DNS and
+    gateways stay consistent. Returns (new_spec, {"subnet":..., "domain":...}) so
+    the build can tell the student what values to write in their answer.
+
+    Only safe when the task lets you choose your own addresses/accounts — if the
+    task pins a subnet or account names, do NOT use these.
+    """
+    text = json.dumps(spec)
+    info: dict[str, str] = {}
+
+    if vary_ip:
+        net = ((spec.get("services") or {}).get("dhcp") or {}).get("network")
+        base = None
+        if net and net.count(".") == 3:
+            base = net.rsplit(".", 1)[0] + "."           # "192.168.1."
+        else:
+            for d in spec.get("devices", []):             # else the server's /24
+                if d.get("ip") and d["ip"].count(".") == 3:
+                    base = d["ip"].rsplit(".", 1)[0] + "."
+                    break
+        if base and base.startswith("192.168."):
+            old = int(base.split(".")[2])
+            n = int(hashlib.sha256((seed + "ip").encode()).hexdigest(), 16) % 254 + 1
+            if n == old:
+                n = n % 254 + 1
+            new_base = "192.168.%d." % n
+            text = text.replace(base, new_base)
+            info["subnet"] = new_base + "0/24"
+
+    if vary_mail:
+        dom = ((spec.get("services") or {}).get("email") or {}).get("domain")
+        if dom and "." in dom:
+            tag = hashlib.sha256((seed + "mail").encode()).hexdigest()[:4]
+            head, _, tail = dom.partition(".")
+            new_dom = "%s-%s.%s" % (head, tag, tail)
+            text = text.replace(dom, new_dom)
+            info["domain"] = new_dom
+
+    return json.loads(text), info
+
+
 def build(spec: dict, pt_version: str | None, seed: str | None = None) -> tuple[Lab, str]:
     mask = spec.get("mask", "255.255.255.0")
     lab = Lab()
@@ -216,9 +261,22 @@ def main(argv=None) -> int:
     ap.add_argument("--seed", default=None,
                     help="your name or roll number: makes YOUR .pkt non-identical to "
                          "everyone else's (nudges device positions; fills a blank web page)")
+    ap.add_argument("--vary-ip", action="store_true",
+                    help="opt-in: shift the LAN subnet per person (only if the task lets "
+                         "you choose your own addresses)")
+    ap.add_argument("--vary-mail", action="store_true",
+                    help="opt-in: shift the email domain per person (only if the task lets "
+                         "you choose your own accounts)")
     args = ap.parse_args(argv)
 
     spec = json.loads(args.spec.read_text(encoding="utf-8"))
+    if (args.vary_ip or args.vary_mail):
+        if not args.seed:
+            print("error: --vary-ip/--vary-mail need --seed \"<your name/roll>\"", file=sys.stderr)
+            return 2
+        spec, changed = vary_spec(spec, args.seed, vary_ip=args.vary_ip, vary_mail=args.vary_mail)
+        for key, val in changed.items():
+            print("varied %-7s-> %s   (write THIS in your answer)" % (key, val))
     lab, name = build(spec, args.pt_version, seed=args.seed)
 
     out = args.output or (_ROOT / "generated" / ("%s.pkt" % name))
