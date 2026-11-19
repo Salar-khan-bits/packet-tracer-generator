@@ -96,6 +96,7 @@ def author_dhcp(
     default_router: str = "0.0.0.0",
     max_users: int = 100,
     port: str = "FastEthernet0",
+    lease_time: int = 86400000,
 ) -> None:
     """Author one DHCP pool bound to the server's NIC and enable the service."""
     eng = engine_of(lab, dev_id)
@@ -122,6 +123,19 @@ def author_dhcp(
         ET.SubElement(ap, "DHCP_SERVER")
     _set(ap, "NAME", port)
 
+    # A template Server-PT can ship DUPLICATE bindings for the same NIC (it has
+    # two serverPool entries, both on FastEthernet0). clean_services empties the
+    # pools of both, so after we fill one, the other is left ENABLED with no
+    # pool -- and Packet Tracer then serves DHCP from that empty server, handing
+    # out addresses from the network base (.1, .2, .3 ...) and IGNORING our
+    # pool's START_IP and DNS_SERVER. A real PT save keeps exactly ONE binding
+    # per NIC, so collapse to one: drop the other ASSOCIATED_PORT(s) for this
+    # same port. (This caused PCs to get .1-.4 instead of .100+, confirmed live
+    # by agent/walkthrough.py 2026-11-19.)
+    for dup in list(aps.findall("ASSOCIATED_PORT")):
+        if dup is not ap and (dup.findtext("NAME") or "") == port:
+            aps.remove(dup)
+
     srv = ap.find("DHCP_SERVER")
     if srv is None:
         srv = ET.SubElement(ap, "DHCP_SERVER")
@@ -132,8 +146,22 @@ def author_dhcp(
     for leftover in pools.findall("POOL"):   # clear leftover pools only
         pools.remove(leftover)
     pool = ET.SubElement(pools, "POOL")
+    # The PRIMARY pool MUST be named "serverPool". A Server-PT always has a
+    # default pool by that name; if no pool named "serverPool" is present when PT
+    # loads the file, PT silently RE-CREATES one with defaults (START_IP = the
+    # network base .0, DNS 0.0.0.0, 512 users). That default then answers DHCP
+    # and hands out .1, .2, .3 ... with DNS 0.0.0.0 -- so clients land OUTSIDE
+    # our range and get no DNS, even though our own pool is correct. Naming our
+    # pool "serverPool" (as every real PT save does, e.g. Sample.pkt) means PT
+    # finds it already there and does NOT spawn the default. Confirmed live by
+    # agent/walkthrough.py 2026-11-19 (the GUI showed both "lan" and a phantom
+    # "serverPool" at .0). pool_name is kept for callers but not used as the name.
+    #
+    # Field set + order below must also match a real PT-authored pool exactly;
+    # the trailing DHCP_POOL_LEASES (empty), LEASE_TIME and WLC_ADDRESS are what
+    # PT always writes.
     for tag, val in (
-        ("NAME", pool_name),
+        ("NAME", "serverPool"),
         ("NETWORK", network),
         ("MASK", mask),
         ("DEFAULT_ROUTER", default_router),
@@ -145,6 +173,9 @@ def author_dhcp(
         ("DOMAIN_NAME", ""),
     ):
         ET.SubElement(pool, tag).text = val
+    ET.SubElement(pool, "DHCP_POOL_LEASES")          # empty container, as PT writes
+    ET.SubElement(pool, "LEASE_TIME").text = str(lease_time)
+    ET.SubElement(pool, "WLC_ADDRESS").text = "0.0.0.0"
     if srv.find("DHCP_RESERVATIONS") is None:
         ET.SubElement(srv, "DHCP_RESERVATIONS")
 

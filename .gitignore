@@ -5,8 +5,10 @@ __pycache__/
 .venv/
 .env
 
-# Generated Packet Tracer outputs (regenerate with genlab.py)
+# Generated Packet Tracer outputs (regenerate with genlab.py / classroom.py)
 generated/**/*.pkt
+generated/**/*.pka
+generated/classroom/
 generated/service_reference_xml/
 
 # Large machine-generated report (not needed to use the tool)
